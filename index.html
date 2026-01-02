@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Portfólio Académico Profissional - Francisco Araújo - Engenharia e Gestão de Sistemas de Informação">
+    <meta name="author" content="Francisco Araújo">
+    <title>Portfólio Académico | Francisco Araújo</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- html2pdf.js for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <span class="brand-icon">📚</span>
+            <span class="brand-text">Portfólio Académico</span>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#sobre" class="nav-link active">Sobre</a></li>
+            <li><a href="#formacao" class="nav-link">Formação</a></li>
+            <li><a href="#experiencia" class="nav-link">Experiência</a></li>
+            <li><a href="#competencias" class="nav-link">Competências</a></li>
+            <li><a href="#projetos" class="nav-link">Projetos</a></li>
+            <li><a href="#premios" class="nav-link">Prémios</a></li>
+            <li><a href="#contacto" class="nav-link">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Hero / About Section (RF01) -->
+        <section id="sobre" class="section hero-section">
+            <div class="hero-background"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="profile-image-container">
+                        <img src="./assets/20230305_174411.jpg" alt="Foto de Perfil - Francisco Araújo"
+                            class="profile-image" id="profileImage">
+                        <div class="profile-status">
+                            <span class="status-dot"></span>
+                            Disponível
+                        </div>
+                    </div>
+                    <div class="hero-text">
+                        <h1 class="hero-name">Francisco Araújo</h1>
+                        <p class="hero-title">Licenciado em Engenharia e Gestão de Sistemas de Informação</p>
+
+                        <div class="contact-info">
+                            <a href="mailto:xicoze.araujo@gmail.com" class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>xicoze.araujo@gmail.com</span>
+                            </a>
+                            <a href="tel:+351961840795" class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+351 961 840 795</span>
+                            </a>
+                            <span class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Viana do Castelo, Portugal</span>
+                            </span>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="https://www.linkedin.com/in/francisco-araújo-650833261" target="_blank"
+                                rel="noopener" class="social-link" title="LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+
+                        <div class="hero-summary">
+                            <p>Profissional em Engenharia e Gestão de Sistemas de Informação, com formação sólida que
+                                integra competências técnicas de TI e conhecimentos de gestão organizacional.
+                                Experiência prática adquirida no desenvolvimento de múltiplos projetos universitários,
+                                com destaque para Desenvolvimento de Aplicações Informáticas, Engenharia de
+                                Dados/Análise de Dados e Desenvolvimento Organizacional com Tecnologias de Informação, e
+                                reconhecido com o Prémio CPES de "Impacto nas Organizações" em Desenvolvimento de
+                                Aplicações Informáticas. Motivado, com capacidade de aprendizagem rápida, espírito de
+                                equipa e foco na aplicação estratégica das tecnologias, como demonstrado na criação de
+                                soluções baseadas em algoritmos e dados, para otimizar processos e agregar valor às
+                                organizações.</p>
+                        </div>
+
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" id="downloadPdf">
+                                <i class="fas fa-download"></i>
+                                Exportar CV em PDF
+                            </button>
+                            <button class="btn btn-secondary" id="shareBtn">
+                                <i class="fas fa-share-alt"></i>
+                                Partilhar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Education Section (RF02) -->
+        <section id="formacao" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    Formação Académica
+                </h2>
+
+                <div class="education-timeline">
+                    <!-- Licenciatura - Universidade do Minho -->
+                    <div class="education-card featured" data-aos="fade-up">
+                        <div class="education-badge">
+                            <i class="fas fa-check"></i>
+                            Concluído
+                        </div>
+                        <div class="education-header">
+                            <div class="education-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="education-main">
+                                <h3>Licenciatura em Engenharia e Gestão de Sistemas de Informação</h3>
+                                <p class="institution">Universidade do Minho</p>
+                                <p class="period"><i class="far fa-calendar"></i> Setembro 2022 - Julho 2025</p>
+                                <p class="grade"><i class="fas fa-medal"></i> Classificação Final: 14,4/20</p>
+                            </div>
+                        </div>
+                        <div class="education-details">
+                            <div class="detail-item">
+                                <span class="label">País:</span>
+                                <span class="value">Portugal</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Cidade:</span>
+                                <span class="value">Guimarães</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Nível do QEQ:</span>
+                                <span class="value">Nível 6 QRQ</span>
+                            </div>
+                        </div>
+                        <button class="expand-btn" aria-expanded="false">
+                            <span>Ver mais detalhes</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="education-extra">
+                            <p>Formação sólida que integra competências técnicas de TI e conhecimentos de gestão
+                                organizacional. Curso focado no desenvolvimento de aplicações informáticas, engenharia
+                                de dados/análise de dados e desenvolvimento organizacional com tecnologias de
+                                informação.</p>
+                            <div class="tags">
+                                <span class="tag">Sistemas de Informação</span>
+                                <span class="tag">Engenharia de Dados</span>
+                                <span class="tag">Gestão de TI</span>
+                                <span class="tag">Desenvolvimento de Software</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Experience Section (RF03) -->
+        <section id="experiencia" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-briefcase"></i>
+                    Experiência Profissional
+                </h2>
+
+                <div class="experience-timeline">
+                    <!-- Panilima -->
+                    <div class="experience-card" data-type="work">
+                        <div class="experience-type-badge work">
+                            <i class="fas fa-store"></i>
+                            Part-Time
+                        </div>
+                        <div class="experience-period">
+                            <span class="year">2022</span>
+                            <span class="separator">-</span>
+                            <span class="year">2024</span>
+                        </div>
+                        <div class="experience-content">
+                            <h3>Atendimento ao Cliente</h3>
+                            <p class="organization">Panilima</p>
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> Viana do Castelo, Portugal</p>
+                            <div class="responsibilities">
+                                <ul>
+                                    <li>Acolher, aconselhar e servir os clientes</li>
+                                    <li>Gestão de stocks, no controlo da receção de mercadorias, inventário de
+                                        matérias-primas e planificação de encomendas</li>
+                                    <li>Garantir o cumprimento das normas de higiene e segurança alimentar</li>
+                                </ul>
+                            </div>
+                            <p class="experience-note"><i class="fas fa-info-circle"></i> Part-Time em férias de verão
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Skills Section (RF05) -->
+        <section id="competencias" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-cogs"></i>
+                    Competências e Conhecimentos
+                </h2>
+
+                <div class="skills-grid">
+                    <!-- Programming Languages -->
+                    <div class="skills-category">
+                        <h3><i class="fas fa-code"></i> Linguagens de Programação</h3>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Python</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Java</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">SQL</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">C</span>
+                                    <span class="skill-level basic">Básico</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">HTML/CSS</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">JavaScript</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools & Frameworks -->
+                    <div class="skills-category">
+                        <h3><i class="fas fa-tools"></i> Ferramentas e Frameworks</h3>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">VS Code / IntelliJ</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Git/GitHub</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Hadoop / Hive</span>
+                                    <span class="skill-level basic">Básico</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 55%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Tableau</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 65%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">Vue.js</span>
+                                    <span class="skill-level intermediate">Intermédio</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Skills -->
+                    <div class="skills-category">
+                        <h3><i class="fas fa-brain"></i> Outras Competências</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Desenvolvimento Software</span>
+                            <span class="skill-tag">Análise de Dados</span>
+                            <span class="skill-tag">Bases de Dados</span>
+                            <span class="skill-tag">Modelação de Processos</span>
+                            <span class="skill-tag">Arquitetura SI</span>
+                            <span class="skill-tag">Gestão de Projetos</span>
+                            <span class="skill-tag">Sistemas Operativos (Linux)</span>
+                            <span class="skill-tag">Redes</span>
+                            <span class="skill-tag">Trabalho em Equipa</span>
+                            <span class="skill-tag">Resolução de Problemas</span>
+                            <span class="skill-tag">Pensamento Crítico</span>
+                            <span class="skill-tag">Proatividade</span>
+                        </div>
+                    </div>
+
+                    <!-- Languages -->
+                    <div class="skills-category">
+                        <h3><i class="fas fa-language"></i> Idiomas</h3>
+                        <div class="language-items">
+                            <div class="language-item">
+                                <span class="language-name">Português</span>
+                                <span class="language-level native">Nativo</span>
+                            </div>
+                            <div class="language-item">
+                                <span class="language-name">Inglês</span>
+                                <span class="language-level b2">B2/C1 - Utilizador Independente/Avançado</span>
+                            </div>
+                        </div>
+                        <p class="language-note"
+                            style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">
+                            <i class="fas fa-info-circle"></i> Níveis: A1/A2 (Utilizador base), B1/B2 (Utilizador
+                            independente), C1/C2 (Utilizador avançado)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section (RF06) -->
+        <section id="projetos" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-project-diagram"></i>
+                    Projetos Universitários
+                </h2>
+
+                <div class="projects-grid">
+                    <!-- Project 1 - DAI -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>Otimização de Rotas de Transporte Público</h3>
+                            <p class="project-period"><i class="far fa-calendar"></i> Fev 2024 - Jun 2024</p>
+                            <p class="project-description">Aplicação em Java para otimizar rotas de transporte público
+                                em Braga. A solução utiliza algoritmos inteligentes e análise de dados de mobilidade
+                                para gerar percursos personalizados, visando uma gestão mais eficiente e sustentável,
+                                especialmente em zonas de baixa densidade.</p>
+                            <div class="project-tech">
+                                <span>Java</span>
+                                <span>Algoritmos</span>
+                                <span>Dados de Mobilidade</span>
+                            </div>
+                            <div class="project-results">
+                                <h4>Resultados:</h4>
+                                <ul>
+                                    <li>Prémio CPES "Impacto nas Organizações"</li>
+                                    <li>Parceria com TUB - Transportes Urbanos de Braga</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 - Engenharia de Dados -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>Engenharia de Dados e Suporte à Decisão</h3>
+                            <p class="project-period"><i class="far fa-calendar"></i> Set 2024 - Jan 2025</p>
+                            <p class="project-description">Implementação de um processo de engenharia de dados
+                                utilizando Python 3, Hadoop e Hive para tratar e preparar datasets. Os dados refinados
+                                foram utilizados para construir dashboards no Tableau, fornecendo insights para suporte
+                                à decisão.</p>
+                            <div class="project-tech">
+                                <span>Python</span>
+                                <span>Hadoop</span>
+                                <span>Hive</span>
+                                <span>Tableau</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 - IAIE -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>Integração SAP S/4HANA e Moloni</h3>
+                            <p class="project-period"><i class="far fa-calendar"></i> Set 2024 - Jan 2025</p>
+                            <p class="project-description">Projeto de integração entre o SAP S/4HANA e Moloni. O
+                                trabalho exigiu a configuração e utilização de serviços OData SAP, consumo de APIs da
+                                segunda plataforma, e a implementação de lógica de integração em Python.</p>
+                            <div class="project-tech">
+                                <span>Python</span>
+                                <span>SAP S/4HANA</span>
+                                <span>APIs</span>
+                                <span>Postman</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 - DOTI -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>Desenvolvimento Organizacional com TI</h3>
+                            <p class="project-period"><i class="far fa-calendar"></i> Fev 2025 - Jun 2025</p>
+                            <p class="project-description">Aplicação da metodologia engIS para analisar o estado atual
+                                (AS-IS) de uma organização e propor melhorias através de tecnologias de informação.
+                                Definição de requisitos de TI, avaliação de soluções de mercado e planeamento da mudança
+                                organizacional e tecnológica (TO-BE).</p>
+                            <div class="project-tech">
+                                <span>Metodologia engIS</span>
+                                <span>Análise de Requisitos</span>
+                                <span>Gestão de Mudança</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 - Programação Web -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3>Plataforma de Gestão de Auditorias - PWA</h3>
+                            <p class="project-period"><i class="far fa-calendar"></i> Fev 2025 - Jun 2025</p>
+                            <p class="project-description">Plataforma completa para gestão de auditorias e ocorrências
+                                na área de Mobilidade e Transportes. Inclui Front-Office (consulta/submissão),
+                                Back-Office (gestão operacional) e uma Progressive Web App (PWA para operação no
+                                terreno).</p>
+                            <div class="project-tech">
+                                <span>Vue.js</span>
+                                <span>JavaScript</span>
+                                <span>HTML/CSS</span>
+                                <span>Git/GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awards Section (RF07) -->
+        <section id="premios" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i>
+                    Prémios e Reconhecimentos
+                </h2>
+
+                <div class="awards-controls">
+                    <button class="sort-btn active" data-sort="date">
+                        <i class="fas fa-calendar"></i> Por Data
+                    </button>
+                    <button class="sort-btn" data-sort="relevance">
+                        <i class="fas fa-star"></i> Por Relevância
+                    </button>
+                </div>
+
+                <div class="awards-list" id="awardsList">
+                    <div class="award-item" data-year="2024" data-relevance="5">
+                        <div class="award-icon gold">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="award-content">
+                            <h3>Prémio CPES: "Impacto nas Organizações"</h3>
+                            <p class="award-entity">TUB - Transportes Urbanos de Braga & Universidade do Minho</p>
+                            <p class="award-description">Reconhecimento atribuído pela CPES ao projeto de
+                                desenvolvimento de uma aplicação para otimizar rotas de transporte público em Braga. A
+                                solução utiliza algoritmos inteligentes e análise de dados de mobilidade para gerar
+                                percursos personalizados, visando uma gestão mais eficiente e sustentável, especialmente
+                                em zonas de baixa densidade.</p>
+                            <span class="award-date"><i class="far fa-calendar"></i> 13 de Junho de 2024</span>
+                            <div style="margin-top: 15px;">
+                                <a href="https://www.linkedin.com/posts/francisco-ara%C3%BAjo-650833261_premio-cpes-impact-on-organisations-activity-7208955767129878528-IRlL"
+                                    target="_blank" rel="noopener" class="project-link"
+                                    style="display: inline-flex; align-items: center; gap: 8px;">
+                                    <i class="fab fa-linkedin"></i> Ver publicação no LinkedIn
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (RF10) -->
+        <section id="contacto" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-envelope"></i>
+                    Contacto
+                </h2>
+
+                <div class="contact-wrapper">
+                    <div class="contact-info-card">
+                        <h3>Vamos conversar!</h3>
+                        <p>Estou disponível para oportunidades profissionais, colaborações ou simplesmente para trocar
+                            ideias sobre tecnologia e sistemas de informação.</p>
+
+                        <div class="contact-details">
+                            <div class="contact-detail-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <span class="label">Email</span>
+                                    <a href="mailto:xicoze.araujo@gmail.com">xicoze.araujo@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-detail-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <span class="label">Telefone</span>
+                                    <a href="tel:+351961840795">+351 961 840 795</a>
+                                </div>
+                            </div>
+                            <div class="contact-detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <span class="label">Localização</span>
+                                    <span>Viana do Castelo, Portugal</span>
+                                </div>
+                            </div>
+                            <div class="contact-detail-item">
+                                <i class="fas fa-university"></i>
+                                <div>
+                                    <span class="label">Formação</span>
+                                    <span>Universidade do Minho</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-social">
+                            <a href="https://www.linkedin.com/in/francisco-araújo-650833261" target="_blank"
+                                class="social-btn linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nome *</label>
+                            <input type="text" id="name" name="name" required placeholder="O seu nome completo">
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="seu.email@exemplo.com">
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Assunto *</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Motivo do contacto">
+                            <span class="error-message" id="subjectError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensagem *</label>
+                            <textarea id="message" name="message" rows="5" required
+                                placeholder="A sua mensagem..."></textarea>
+                            <span class="error-message" id="messageError"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Mensagem
+                        </button>
+                        <div class="form-feedback" id="formFeedback"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 João Miguel Silva Santos. Todos os direitos reservados.</p>
+                <p class="footer-update">Última atualização: Dezembro 2024</p>
+            </div>
+            <div class="footer-links">
+                <button class="copy-section-link" data-section="sobre" title="Copiar link da secção Sobre">
+                    <i class="fas fa-link"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeShareModal">&times;</button>
+            <h3>Partilhar Perfil</h3>
+            <div class="share-buttons">
+                <button class="share-btn linkedin" id="shareLinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                    LinkedIn
+                </button>
+                <button class="share-btn twitter" id="shareTwitter">
+                    <i class="fab fa-twitter"></i>
+                    Twitter
+                </button>
+                <button class="share-btn facebook" id="shareFacebook">
+                    <i class="fab fa-facebook"></i>
+                    Facebook
+                </button>
+                <button class="share-btn email" id="shareEmail">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </button>
+            </div>
+            <div class="copy-link-section">
+                <input type="text" id="shareUrl" readonly>
+                <button class="btn btn-secondary" id="copyUrl">
+                    <i class="fas fa-copy"></i>
+                    Copiar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Link copiado!</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="main.js"></script>
+</body>
+
+</html>
