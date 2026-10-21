@@ -1,0 +1,856 @@
+<title>Oração Peça a Peça</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Young+Serif&display=swap">
+<style>
+:root{
+  /* Layout: ecrã partilhado/projetor — barra fina no topo, palco central com faixa de azulejo; no jogo, folha de oração à esquerda e peças à direita (empilham no telemóvel) */
+  --bg:#F3F5FB;--surface:#FFFFFF;--surface-2:#EBF0FA;--ink:#13204A;--muted:#58658A;--line:#D2DAEE;
+  --azul:#1C3F94;--on-azul:#FFFFFF;--azul-soft:#E2E9FA;
+  --ouro:#E0A423;--on-ouro:#2A1C00;--ouro-soft:#FFF2D2;
+  --ok:#1B7A4B;--ok-soft:#DCF2E5;--bad:#BE3328;--bad-soft:#FBE2DE;--gelo:#1F8DBF;--gelo-soft:#DBF0FA;
+  --hero-bg:#1C3F94;--hero-ink:#FFFFFF;--hero-tile:#FFFFFF;
+  --shadow:0 1px 0 rgba(19,32,74,.05),0 8px 22px -12px rgba(19,32,74,.35);
+  --f-display:"Young Serif",Georgia,"Times New Roman",serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --tile:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g fill='black'><path d='M32 12 C36 22 42 28 52 32 C42 36 36 42 32 52 C28 42 22 36 12 32 C22 28 28 22 32 12Z'/><path d='M0 0h10a10 10 0 0 1-10 10z'/><path d='M64 0v10a10 10 0 0 1-10-10z'/><path d='M0 64v-10a10 10 0 0 1 10 10z'/><path d='M64 64h-10a10 10 0 0 1 10-10z'/><circle cx='32' cy='2.5' r='2.5'/><circle cx='32' cy='61.5' r='2.5'/><circle cx='2.5' cy='32' r='2.5'/><circle cx='61.5' cy='32' r='2.5'/><circle cx='19' cy='19' r='2'/><circle cx='45' cy='19' r='2'/><circle cx='19' cy='45' r='2'/><circle cx='45' cy='45' r='2'/></g><rect x='.5' y='.5' width='63' height='63' fill='none' stroke='black' stroke-opacity='.45'/></svg>");
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1230;--surface:#141F47;--surface-2:#1A2756;--ink:#E7ECFA;--muted:#9AA7CE;--line:#2B3A6E;
+  --azul:#8FAEF7;--on-azul:#0B1230;--azul-soft:#1F2D62;--ouro:#F2BD4C;--on-ouro:#2A1C00;--ouro-soft:#3A2D10;
+  --ok:#55CC8F;--ok-soft:#113A27;--bad:#F27C70;--bad-soft:#47191A;--gelo:#6ACBF3;--gelo-soft:#103448;
+  --hero-bg:#17296A;--hero-ink:#EEF2FF;--hero-tile:#A9C0FF;--shadow:0 8px 22px -12px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1230;--surface:#141F47;--surface-2:#1A2756;--ink:#E7ECFA;--muted:#9AA7CE;--line:#2B3A6E;
+  --azul:#8FAEF7;--on-azul:#0B1230;--azul-soft:#1F2D62;--ouro:#F2BD4C;--on-ouro:#2A1C00;--ouro-soft:#3A2D10;
+  --ok:#55CC8F;--ok-soft:#113A27;--bad:#F27C70;--bad-soft:#47191A;--gelo:#6ACBF3;--gelo-soft:#103448;
+  --hero-bg:#17296A;--hero-ink:#EEF2FF;--hero-tile:#A9C0FF;--shadow:0 8px 22px -12px rgba(0,0,0,.7);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.1}
+p{margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stack{display:flex;flex-direction:column;gap:14px}
+.stack-lg{display:flex;flex-direction:column;gap:28px;padding-block:28px 48px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.muted{color:var(--muted)}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:10px;padding-block:8px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:4px 0;font-family:var(--f-display);font-size:19px;color:var(--azul);margin-right:auto}
+.mark{width:28px;height:28px;border-radius:7px;background:var(--hero-bg);position:relative;overflow:hidden;flex:none}
+.mark::after{content:"";position:absolute;inset:0;background:var(--hero-tile);-webkit-mask:var(--tile) center/28px 28px;mask:var(--tile) center/28px 28px;opacity:.9}
+.prog{font-weight:700;color:var(--muted);font-size:14px}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-weight:700;min-height:44px;transition:transform .08s,background .15s}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:translateY(1px)}
+.btn.sm{min-height:38px;padding:6px 12px;font-size:14px;border-radius:10px}
+.btn.icon{width:38px;padding:0}
+.btn.primary{background:var(--azul);border-color:var(--azul);color:var(--on-azul)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.gold{background:var(--ouro);border-color:var(--ouro);color:var(--on-ouro)}
+.btn.gold:hover{filter:brightness(1.05)}
+.btn.light{background:transparent;border-color:currentColor;color:inherit}
+.btn.light:hover{background:rgba(255,255,255,.12)}
+.btn.white{background:#fff;border-color:#fff;color:#13204A}
+.btn.big{font-size:19px;padding:14px 26px;border-radius:16px;min-height:58px}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.link{background:none;border:0;color:var(--azul);font-weight:700;padding:4px;text-decoration:underline;text-underline-offset:3px}
+.chip{border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;background:var(--surface);min-height:40px}
+.chip[aria-pressed="true"]{background:var(--azul);border-color:var(--azul);color:var(--on-azul)}
+
+/* tiled hero */
+.tiled{position:relative;background:var(--hero-bg);color:var(--hero-ink);overflow:hidden;isolation:isolate}
+.tiled::before{content:"";position:absolute;inset:0;background:var(--hero-tile);-webkit-mask:var(--tile) 0 0/72px 72px repeat;mask:var(--tile) 0 0/72px 72px repeat;opacity:.13;z-index:-1}
+.hero-in{padding-block:44px 48px;display:flex;flex-direction:column;gap:16px;max-width:1200px}
+.hero h1{font-size:clamp(44px,8vw,96px);line-height:.95;letter-spacing:-.01em}
+.hero .lead{font-size:clamp(17px,2vw,21px);max-width:58ch;opacity:.92}
+.hero .row{margin-top:8px}
+
+/* cards & sections */
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-h h2{font-size:26px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step .num{font-family:var(--f-display);font-size:34px;color:var(--ouro);line-height:1;min-width:28px}
+.step h3{font-size:20px;margin-bottom:4px}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stage{border-top:4px solid var(--azul);padding-top:10px;min-width:0}
+.stage h3{font-size:17px;margin-bottom:6px}
+.stage ol{margin:0;padding-left:20px;color:var(--muted);font-size:15px}
+@media (max-width:900px){.stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.stages{grid-template-columns:1fr}}
+
+/* setup */
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.tcard{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:14px;padding:10px;background:var(--surface);border-left:6px solid var(--team)}
+.tico{width:48px;height:48px;border-radius:12px;background:var(--team);border:0;font-size:24px;display:grid;place-items:center;flex:none}
+.tcard input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);font-weight:600}
+.addteam{border:2px dashed var(--line);border-radius:14px;background:transparent;font-weight:700;color:var(--azul);min-height:70px}
+.levels{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.lrow{display:grid;grid-template-columns:auto 34px minmax(0,1fr) auto;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
+.lrow.off{opacity:.6;background:var(--surface-2)}
+.lrow input[type=checkbox]{width:22px;height:22px;accent-color:var(--azul)}
+.lnum{font-family:var(--f-display);font-size:22px;color:var(--azul);text-align:center}
+.linfo strong{display:block;font-weight:700}
+.meta{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--ouro-soft);color:var(--ink);margin-left:6px;vertical-align:1px}
+.lbtns{display:flex;gap:4px}
+@media (max-width:560px){.lrow{grid-template-columns:auto 28px minmax(0,1fr)}.lbtns{grid-column:1/-1;justify-content:flex-end}}
+.setup-foot{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:5;padding-bottom:env(safe-area-inset-bottom,0px)}
+.setup-foot .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-block:12px}
+.note{background:var(--ouro-soft);border-radius:12px;padding:10px 14px;font-size:15px}
+
+/* level setup */
+.lvl-hero{border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:10px}
+.lvl-hero .big{font-size:clamp(36px,6vw,64px)}
+.lvl-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.lvl-grid{grid-template-columns:1fr}}
+.opt{display:flex;flex-direction:column;gap:10px;padding-block:14px;border-bottom:1px solid var(--line)}
+.opt:last-child{border-bottom:0}
+.opt h3{font-family:var(--f-body);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.custom{display:flex;align-items:center;gap:6px}
+.custom input{width:84px;border:1.5px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);font-weight:700}
+select{border:1.5px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);max-width:100%;font-weight:600}
+.stepper{display:inline-flex;align-items:center;gap:6px}
+.stepper b{min-width:24px;text-align:center;font-size:18px}
+.secret{background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px}
+.secret ol{margin:0;padding-left:22px}
+.mini{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mini li{display:flex;align-items:center;gap:10px}
+.dot{width:32px;height:32px;border-radius:9px;background:var(--team);display:grid;place-items:center;font-size:17px;flex:none}
+.mini .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.mini b{font-variant-numeric:tabular-nums;font-size:18px}
+
+/* handoff */
+.handoff{margin-block:24px;border-radius:28px;background:var(--team);color:#fff;text-align:center;padding:48px 20px;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;overflow:hidden;isolation:isolate;min-height:62vh;justify-content:center}
+.handoff::before{content:"";position:absolute;inset:0;background:#fff;-webkit-mask:var(--tile) 0 0/80px 80px repeat;mask:var(--tile) 0 0/80px 80px repeat;opacity:.12;z-index:-1}
+.handoff h1{font-size:clamp(40px,7vw,84px)}
+.team-badge{width:110px;height:110px;border-radius:28px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:60px;border:3px solid rgba(255,255,255,.5)}
+.turn-warn{font-size:clamp(20px,2.6vw,30px);font-weight:800;background:rgba(0,0,0,.22);padding:10px 20px;border-radius:999px}
+
+/* play */
+.play-wrap{padding-block:14px 32px;display:flex;flex-direction:column;gap:12px}
+.playbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:10px 14px;border-left:8px solid var(--team)}
+.pteam{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.pteam .dot{width:46px;height:46px;font-size:24px;border-radius:12px}
+.pteam b{display:block;font-size:20px;line-height:1.1}
+.pteam small{color:var(--muted);font-size:14px}
+.pactions{display:flex;gap:8px}
+.timer{display:flex;align-items:center;gap:10px;position:relative}
+.timer svg{display:block}
+.timer .track{fill:none;stroke:var(--surface-2);stroke-width:7}
+.timer .bar{fill:none;stroke:var(--azul);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .2s linear}
+.timer .secs{position:absolute;left:0;width:72px;text-align:center;font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.timer.low .bar{stroke:var(--bad)}
+.timer.low .secs{color:var(--bad)}
+.timer.frozen .bar{stroke:var(--gelo)}
+.timer.frozen .secs{color:var(--gelo)}
+.freeze-lbl{font-weight:800;color:var(--gelo);font-size:14px;font-variant-numeric:tabular-nums}
+.powers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.power{display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 12px;min-height:56px}
+.power:hover:not(:disabled){border-color:var(--ouro);background:var(--ouro-soft)}
+.power .pi{font-size:24px}
+.power .pn{flex:1;min-width:0;font-weight:800;line-height:1.15}
+.power .pn small{display:block;font-weight:500;color:var(--muted);font-size:13px}
+.power .pc{min-width:28px;height:28px;border-radius:999px;background:var(--ouro);color:var(--on-ouro);display:grid;place-items:center;font-weight:800;font-variant-numeric:tabular-nums}
+.power:disabled{opacity:.45;cursor:not-allowed}
+.power:disabled .pc{background:var(--line);color:var(--muted)}
+@media (max-width:640px){.power .pn small{display:none}.power{padding:8px}}
+.play{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.play{grid-template-columns:1fr}}
+.sheet{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);transition:border-color .2s}
+.sheet.is-frozen{border-color:var(--gelo);box-shadow:0 0 0 4px var(--gelo-soft)}
+.panel-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.panel-h h2{font-size:22px}
+.slots{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.slot{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;align-items:stretch}
+.slot .n{font-family:var(--f-display);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:19px}
+.slot .box{min-height:50px;border:2px dashed var(--line);border-radius:12px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:transparent;text-align:left;width:100%}
+.slot.next .box{border-color:var(--azul);background:var(--azul-soft)}
+.slot .ph{color:var(--muted);font-size:14px}
+.slot.filled .box{border-style:solid;border-color:var(--azul);background:var(--azul-soft)}
+.slot.filled .box:hover{filter:brightness(.97)}
+.slot.locked .box{border-color:var(--ouro);background:var(--ouro-soft);cursor:default}
+.slot.ok .box{border-color:var(--ok);background:var(--ok-soft)}
+.slot.bad .box{border-color:var(--bad);background:var(--bad-soft)}
+.slot.just .box{animation:pop .22s ease-out}
+.ptext{font-size:clamp(16px,1.5vw,20px);font-weight:600;line-height:1.3;flex:1;min-width:0}
+.mk{font-weight:800;font-size:18px}
+.slot.ok .mk{color:var(--ok)}.slot.bad .mk{color:var(--bad)}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.015)}100%{transform:scale(1)}}
+.poolbox{background:var(--surface-2);border-radius:18px;padding:16px;min-width:0}
+.pool{display:flex;flex-wrap:wrap;gap:10px}
+.piece{border:2px solid var(--azul);background:var(--surface);border-radius:12px;padding:10px 14px;text-align:left;box-shadow:0 3px 0 var(--azul);font-weight:600;font-size:clamp(16px,1.45vw,19px);line-height:1.3;max-width:100%;transition:transform .08s,box-shadow .08s}
+.piece:hover{transform:translateY(-1px)}
+.piece:active{transform:translateY(2px);box-shadow:0 1px 0 var(--azul)}
+.warnpill{font-family:var(--f-body);font-size:13px;font-weight:800;background:var(--bad-soft);color:var(--bad);border-radius:999px;padding:3px 10px}
+.empty{color:var(--muted);font-weight:600}
+.confirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--ouro-soft);border-radius:14px;padding:12px 14px;font-weight:700}
+.confirm span{margin-right:auto}
+.pausecard{text-align:center;padding:64px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.pausecard h2{font-size:36px}
+
+/* results */
+.result{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-block:20px}
+@media (max-width:760px){.result{grid-template-columns:1fr}}
+.bignum{font-family:var(--f-display);font-size:clamp(64px,11vw,128px);line-height:.9;font-variant-numeric:tabular-nums}
+.breakdown{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.breakdown li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.breakdown li.tot{border-bottom:0;font-weight:800;font-size:20px}
+.pos{color:var(--ok);font-weight:800}.neg{color:var(--bad);font-weight:800}
+
+/* reveal */
+.prayer{font-family:var(--f-display);font-size:clamp(22px,2.6vw,34px);line-height:1.45;max-width:46ch}
+.prayer span{transition:background .2s,color .2s;border-radius:6px;padding:0 2px}
+.prayer.stepping span{color:var(--muted)}
+.prayer.stepping span.done{color:var(--ink)}
+.prayer.stepping span.hl{color:var(--ink);background:var(--ouro-soft)}
+
+/* question */
+.qtext{font-family:var(--f-display);font-size:clamp(24px,3vw,38px);line-height:1.2;max-width:34ch}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.opts{grid-template-columns:1fr}}
+.qopt{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--line);border-radius:16px;padding:14px 16px;background:var(--surface);font-size:clamp(17px,1.6vw,21px);font-weight:600}
+.qopt .lt{font-family:var(--f-display);font-size:24px;color:var(--azul);line-height:1}
+.qopt.right{border-color:var(--ok);background:var(--ok-soft)}
+.qopt.dim{opacity:.5}
+.explain{background:var(--azul-soft);border-radius:16px;padding:16px 18px;font-size:clamp(16px,1.5vw,19px);max-width:75ch}
+.toggles{display:flex;flex-wrap:wrap;gap:10px}
+.ttog{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;background:var(--surface);font-weight:700;min-height:46px}
+.ttog[aria-pressed="true"]{border-color:var(--ok);background:var(--ok-soft)}
+.ttog .dot{width:32px;height:32px}
+
+/* scores */
+.rank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.rk{display:grid;grid-template-columns:36px 44px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px}
+.rk .pl{font-family:var(--f-display);font-size:26px;color:var(--muted);text-align:center}
+.rk .dot{width:44px;height:44px;font-size:22px;border-radius:12px}
+.rk .nm{font-weight:800;font-size:19px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk .barw{height:10px;background:var(--surface-2);border-radius:999px;margin-top:6px;overflow:hidden}
+.rk .barw i{display:block;height:100%;background:var(--team);border-radius:999px}
+.rk .sc{text-align:right;font-variant-numeric:tabular-nums}
+.rk .sc b{font-size:28px;display:block;line-height:1}
+.rk .sc small{color:var(--ok);font-weight:800}
+.adjrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding-block:8px;border-bottom:1px solid var(--line)}
+.adjrow .who{display:flex;gap:10px;align-items:center;min-width:0;font-weight:700}
+.adjrow .who span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adjbtns{display:flex;gap:6px}
+.loglist{list-style:none;margin:0;padding:0;font-size:14px}
+.loglist li{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
+
+/* final */
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;max-width:720px;margin:0 auto}
+.pod{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;min-width:0}
+.pod .col{width:100%;border-radius:16px 16px 0 0;background:var(--team);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:12px;font-family:var(--f-display);font-size:34px;position:relative;overflow:hidden;isolation:isolate}
+.pod .col::before{content:"";position:absolute;inset:0;background:#fff;-webkit-mask:var(--tile) 0 0/48px 48px repeat;mask:var(--tile) 0 0/48px 48px repeat;opacity:.14;z-index:-1}
+.pod .dot{width:58px;height:58px;font-size:30px;border-radius:16px}
+.pod .nm{font-weight:800;font-size:18px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .pts{font-variant-numeric:tabular-nums;font-weight:800;color:var(--muted)}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(8,14,40,.55);z-index:50}
+.modal{position:fixed;z-index:51;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,calc(100vw - 24px));max-height:calc(100vh - 48px);overflow:auto;background:var(--surface);border-radius:20px;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);padding:20px}
+.modal-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.modal-h h2{font-size:24px}
+.picker{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.picker button{aspect-ratio:1;max-width:100%;border:2px solid var(--line);border-radius:12px;background:var(--surface-2);font-size:24px}
+.picker button[aria-pressed="true"]{border-color:var(--azul);box-shadow:0 0 0 3px var(--azul-soft)}
+.picker .sw{background:var(--sw)}
+@media (max-width:480px){.picker{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:800;font-size:14px}
+.field input,.field textarea{border:1.5px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);width:100%}
+.field textarea{min-height:150px;resize:vertical;line-height:1.5}
+.rules dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px}
+.rules dt{font-weight:800;font-variant-numeric:tabular-nums;color:var(--azul)}
+.rules dd{margin:0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;z-index:60;max-width:calc(100vw - 32px)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div id="app"></div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script>
+/* ===================== DADOS ===================== */
+const LEVELS = [
+{id:"l1",stage:1,title:"Sinal da Cruz + Glória ao Pai",
+ blocks:["Em nome do Pai, e do Filho e do Espírito Santo. Ámen.","Glória ao Pai, ao Filho e ao Espírito Santo.","Como era no princípio,","agora e sempre,","pelos séculos dos séculos. Ámen."],
+ intruders:["Em nome do Pai, e da Mãe e do Espírito Santo. Ámen.","Como será no fim,","pelos anos dos anos. Ámen."],
+ q:{text:"No Glória ao Pai dizemos «como era no princípio, agora e sempre». O que estamos a afirmar?",opts:["Que Deus é eterno: sempre existiu e existirá para sempre","Que esta oração só se reza no princípio do dia","Que Deus foi mudando desde o princípio do mundo","Que a Missa começa sempre com esta oração"],ok:0,
+ explain:"O Pai, o Filho e o Espírito Santo são um só Deus em três Pessoas: a Santíssima Trindade. Ao dizer «como era no princípio, agora e sempre» proclamamos que Deus não tem princípio nem fim — o seu amor e a sua glória não mudam."}},
+{id:"l2",stage:1,title:"Avé Maria",
+ blocks:["Avé Maria, cheia de graça, o Senhor é convosco.","Bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus.","Santa Maria, Mãe de Deus,","rogai por nós, pecadores,","agora e na hora da nossa morte. Ámen."],
+ intruders:["Avé Maria, cheia de luz, o Senhor está convosco.","rogai por nós, anjos do Céu,","agora e para sempre. Ámen."],
+ q:{text:"De onde vêm as primeiras palavras da Avé Maria?",opts:["Da saudação do Anjo Gabriel e de Santa Isabel a Maria","Das palavras de Jesus na Última Ceia","De uma oração dos pastorinhos de Fátima","De um salmo do rei David"],ok:0,
+ explain:"«Avé, cheia de graça, o Senhor é convosco» são palavras do Anjo Gabriel na Anunciação (Lc 1,28). «Bendita sois vós entre as mulheres e bendito é o fruto do vosso ventre» disse-as Santa Isabel quando Maria a visitou (Lc 1,42). A segunda parte, «Santa Maria, Mãe de Deus…», é o pedido que a Igreja acrescentou."}},
+{id:"l3",stage:1,title:"Santo Anjo da Guarda",
+ blocks:["Santo Anjo do Senhor,","meu zeloso guardador,","se a ti me confiou a piedade divina,","sempre me rege, guarda,","governa e ilumina. Ámen."],
+ intruders:["meu fiel companheiro,","se a ti me confiou a bondade humana,","sempre me ajuda e consola,"],
+ q:{text:"Qual é a missão do Anjo da Guarda na nossa vida?",opts:["Acompanhar-nos e proteger-nos, guiando-nos no caminho do bem","Fazer os trabalhos por nós quando estamos cansados","Castigar-nos quando nos portamos mal","Aparecer só quando estamos em perigo de vida"],ok:0,
+ explain:"Deus confia cada pessoa a um anjo que a acompanha desde o início da vida (Catecismo, n.º 336). Por isso pedimos que nos «reja, guarde, governe e ilumine»: que nos oriente, proteja, ajude a decidir bem e nos mostre o caminho de Deus."}},
+{id:"l4",stage:2,title:"Pai Nosso",
+ blocks:["Pai Nosso, que estais no Céu, santificado seja o vosso nome.","Venha a nós o vosso Reino.","Seja feita a vossa vontade, assim na terra como no Céu.","O pão nosso de cada dia nos dai hoje.","Perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido.","E não nos deixeis cair em tentação,","mas livrai-nos do mal. Ámen."],
+ intruders:["Pai Nosso, que estais em toda a parte,","Seja feita a nossa vontade, assim na terra como no Céu.","O pão nosso de cada semana nos dai hoje."],
+ q:{text:"Quem nos ensinou o Pai Nosso?",opts:["Jesus, quando os discípulos Lhe pediram que os ensinasse a rezar","São Pedro, o primeiro Papa","Moisés, no Monte Sinai","São Paulo, numa das suas cartas"],ok:0,
+ explain:"Foi o próprio Jesus que ensinou esta oração aos discípulos (Mt 6,9-13; Lc 11,1-4). Ao pedir «o pão nosso de cada dia» pedimos o alimento de que precisamos — para nós e para quem tem fome — e também o Pão da Palavra e da Eucaristia. E é «nosso»: pede-se em conjunto, a pensar em todos."}},
+{id:"l5",stage:2,title:"Consagração a Nossa Senhora",
+ blocks:["Ó minha Senhora e minha Mãe,","eu me ofereço todo a vós, e em prova da minha devoção para convosco,","vos consagro neste dia os meus olhos, os meus ouvidos, a minha boca, o meu coração","e inteiramente todo o meu ser.","E porque assim sou vosso, ó incomparável Mãe,","guardai-me e defendei-me como coisa e propriedade vossa. Ámen."],
+ intruders:["eu vos prometo rezar todos os dias,","vos consagro neste dia os meus pés e as minhas mãos,","e protegei-me de todos os perigos. Ámen."],
+ q:{text:"Nesta oração consagramos a Maria os olhos, os ouvidos, a boca e o coração. O que significa isso na prática?",opts:["Usar o que vemos, ouvimos, dizemos e sentimos para o bem, como Maria","Prometer não falar com ninguém durante um dia","Rezar sempre de olhos fechados","Que Maria passa a decidir tudo por nós"],ok:0,
+ explain:"Consagrar é entregar a Deus, pelas mãos de Maria. Na prática é escolher olhar para os outros com bondade, ouvir com atenção, falar sem magoar e amar de coração — como Maria fez. Ela não decide por nós: ajuda-nos a escolher o bem."}},
+{id:"l6",stage:2,title:"Salvé Rainha",
+ blocks:["Salvé, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salvé!","A vós bradamos, os degredados filhos de Eva;","a vós suspiramos, gemendo e chorando neste vale de lágrimas.","Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei;","e depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre.","Ó clemente, ó piedosa, ó doce sempre Virgem Maria.","Rogai por nós, Santa Mãe de Deus,","para que sejamos dignos das promessas de Cristo. Ámen."],
+ intruders:["A vós cantamos, os alegres filhos de Adão;","Eia, pois, rainha nossa, esses vossos olhos a nós voltai;","Ó clemente, ó paciente, ó doce Mãe da Igreja."],
+ q:{text:"Porque chamamos a Maria «advogada nossa»?",opts:["Porque intercede por nós junto de Jesus, como quem nos defende","Porque estudou leis em Jerusalém","Porque é ela quem nos julga no fim da vida","Porque escreveu os Mandamentos"],ok:0,
+ explain:"Uma advogada fala a favor de quem precisa de ajuda. Maria, como Mãe, apresenta a Jesus os nossos pedidos e defende-nos — como nas Bodas de Caná (Jo 2). O «vale de lágrimas» é esta vida na terra, onde também há sofrimento; o «desterro» é estarmos ainda longe da casa do Pai."}},
+{id:"l7",stage:3,title:"Ato de Contrição",
+ blocks:["Meu Deus, porque sois infinitamente bom","e Vos amo de todo o meu coração,","pesa-me de Vos ter ofendido","e, com o auxílio da vossa divina graça,","proponho firmemente emendar-me e nunca mais Vos tornar a ofender.","Peço e espero o perdão das minhas culpas","pela vossa infinita misericórdia. Ámen."],
+ intruders:["e porque tenho medo do castigo,","proponho tentar portar-me melhor algumas vezes.","pelos meus próprios méritos. Ámen."],
+ q:{text:"Em que sacramento rezamos especialmente o Ato de Contrição?",opts:["Na Reconciliação (Confissão)","No Batismo","No Matrimónio","Na Ordem"],ok:0,
+ explain:"Rezamos o Ato de Contrição na Confissão, depois de dizer os pecados ao sacerdote. «Proponho firmemente emendar-me» é o propósito de emenda: a decisão sincera de mudar e de evitar voltar a fazer o mal, contando com a ajuda da graça de Deus."}},
+{id:"l8",stage:3,title:"Confesso (Ato Penitencial)",
+ blocks:["Confesso a Deus todo-poderoso","e a vós, irmãos,","que pequei muitas vezes por pensamentos e palavras,","atos e omissões,","por minha culpa, minha culpa, minha tão grande culpa.","E peço à Virgem Maria, aos Anjos e Santos,","e a vós, irmãos, que rogueis por mim","a Deus, nosso Senhor."],
+ intruders:["que pequei poucas vezes,","por culpa dos outros e um pouco por minha culpa.","E peço ao senhor padre e aos catequistas,"],
+ q:{text:"Porque batemos no peito ao dizer «por minha culpa» no início da Missa?",opts:["É um gesto de arrependimento: reconhecemos que o pecado nasce do nosso coração","Para acordar quem está distraído","Para marcar o ritmo do cântico","Para mostrar que somos fortes"],ok:0,
+ explain:"É um gesto antigo de humildade, como o do publicano que batia no peito e pedia a Deus que tivesse piedade dele, pecador (Lc 18,13). Não acusamos ninguém: assumimos as nossas falhas e pedimos à Virgem Maria, aos Santos e aos irmãos que rezem por nós."}},
+{id:"l9",stage:3,title:"Glória a Deus nas Alturas",
+ blocks:["Glória a Deus nas alturas e paz na terra aos homens por Ele amados.","Senhor Deus, Rei dos céus, Deus Pai todo-poderoso:","nós Vos louvamos, nós Vos bendizemos, nós Vos adoramos, nós Vos glorificamos,","nós Vos damos graças, por vossa imensa glória.","Senhor Jesus Cristo, Filho Unigénito, Senhor Deus, Cordeiro de Deus, Filho de Deus Pai:","Vós que tirais o pecado do mundo, tende piedade de nós;","Vós que tirais o pecado do mundo, acolhei a nossa súplica;","Vós que estais à direita do Pai, tende piedade de nós.","Só Vós sois o Santo; só Vós, o Senhor; só Vós, o Altíssimo, Jesus Cristo; com o Espírito Santo, na glória de Deus Pai. Ámen."],
+ intruders:["Glória a Deus nas alturas e paz na terra a todos os anjos.","nós Vos pedimos, nós Vos esperamos,","Só Vós sois o Rei; só Vós, o Juiz;"],
+ q:{text:"Quem cantou as primeiras palavras do Glória na noite em que Jesus nasceu?",opts:["Os anjos, ao anunciarem o nascimento aos pastores","Os Reis Magos, ao chegarem a Belém","Maria e José no presépio","Os apóstolos no dia de Pentecostes"],ok:0,
+ explain:"Na noite de Natal, uma multidão de anjos louvava a Deus dizendo «Glória a Deus nas alturas e paz na terra…» (Lc 2,14). A Igreja continuou esse hino e canta-o na Missa dos domingos (exceto no Advento e na Quaresma) e nas festas."}},
+{id:"l10",stage:4,title:"Credo (Símbolo dos Apóstolos)",
+ blocks:["Creio em Deus Pai todo-poderoso, Criador do céu e da terra;","e em Jesus Cristo, seu único Filho, nosso Senhor,","que foi concebido pelo poder do Espírito Santo; nasceu da Virgem Maria;","padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado;","desceu à mansão dos mortos; ressuscitou ao terceiro dia;","subiu aos Céus, está sentado à direita de Deus Pai todo-poderoso,","de onde há de vir a julgar os vivos e os mortos.","Creio no Espírito Santo,","na santa Igreja Católica,","na comunhão dos Santos,","na remissão dos pecados,","na ressurreição da carne e na vida eterna. Ámen."],
+ intruders:["que foi concebido pelo poder de São José;","ressuscitou ao sétimo dia;","creio na reencarnação das almas;"],
+ q:{text:"O que proclamamos ao dizer que cremos na «comunhão dos Santos» e na «ressurreição da carne»?",opts:["Que todos os que estão unidos a Cristo, na terra e no Céu, são uma só família, e que no fim também o nosso corpo ressuscitará","Que só os santos canonizados podem comungar","Que as almas voltam a nascer noutro corpo","Que não se deve comer carne às sextas-feiras"],ok:0,
+ explain:"A comunhão dos Santos é a união de todos os que pertencem a Cristo: os que vivem na terra, os que se purificam e os que já estão no Céu — e rezamos uns pelos outros. A ressurreição da carne quer dizer que, no fim dos tempos, Deus ressuscitará também o nosso corpo, como Jesus ressuscitou. É este o Credo que vão proclamar na Profissão de Fé!"}},
+{id:"x1",stage:5,title:"Santo + Cordeiro de Deus",
+ blocks:["Santo, Santo, Santo, Senhor Deus do Universo.","O céu e a terra proclamam a vossa glória.","Hossana nas alturas.","Bendito o que vem em nome do Senhor.","Hossana nas alturas.","Cordeiro de Deus, que tirais o pecado do mundo, tende piedade de nós.","Cordeiro de Deus, que tirais o pecado do mundo, dai-nos a paz."],
+ intruders:["Santo, Santo, Santo, Senhor Deus dos anjos.","Hossana na terra.","Cordeiro de Deus, que tirais a tristeza do mundo, dai-nos a paz."],
+ q:{text:"De onde vêm as palavras «Hossana» e «Bendito o que vem em nome do Senhor»?",opts:["Da multidão que aclamou Jesus à entrada em Jerusalém","Dos pastores em Belém","Do Anjo da Paz em Fátima","De Pôncio Pilatos"],ok:0,
+ explain:"No Domingo de Ramos, o povo recebeu Jesus em Jerusalém com ramos e gritos de «Hossana!» (Mt 21,9). Já o «Cordeiro de Deus» lembra as palavras de São João Batista ao ver Jesus (Jo 1,29): Ele é quem tira o pecado do mundo."}},
+{id:"x2",stage:5,title:"Oração do Anjo (Fátima)",
+ blocks:["Meu Deus,","eu creio, adoro, espero e amo-Vos.","Peço-Vos perdão","para os que não creem, não adoram,","não esperam e não Vos amam."],
+ intruders:["eu creio, adoro, sirvo e obedeço-Vos.","Peço-Vos castigo"],
+ q:{text:"Quem ensinou esta oração aos três pastorinhos de Fátima?",opts:["O Anjo da Paz, em 1916","Nossa Senhora, em 1917","O pároco de Fátima","O Papa, numa visita a Portugal"],ok:0,
+ explain:"Em 1916, antes das aparições de Nossa Senhora, o Anjo da Paz (também chamado Anjo de Portugal) apareceu a Lúcia, Francisco e Jacinta e ensinou-lhes esta oração. São Francisco e Santa Jacinta Marto são hoje santos!"}},
+{id:"x3",stage:5,title:"Os 10 Mandamentos",
+ blocks:["Amar a Deus sobre todas as coisas.","Não invocar o santo nome de Deus em vão.","Santificar os domingos e festas de guarda.","Honrar pai e mãe.","Não matar.","Guardar castidade nas palavras e nas obras.","Não furtar.","Não levantar falsos testemunhos.","Guardar castidade nos pensamentos e nos desejos.","Não cobiçar as coisas alheias."],
+ intruders:["Rezar antes de cada refeição.","Ir à catequese todas as semanas."],
+ q:{text:"Onde recebeu Moisés as Tábuas da Lei com os Mandamentos?",opts:["No Monte Sinai","No Monte das Oliveiras","No rio Jordão","No Monte Tabor"],ok:0,
+ explain:"Deus deu a Lei a Moisés no Monte Sinai, depois de libertar o povo do Egito (Ex 20). Jesus resumiu os dez em dois: amar a Deus sobre todas as coisas e ao próximo como a nós mesmos (Mt 22,37-39)."}}
+];
+const STAGES={1:"Etapa 1 · Aquecimento",2:"Etapa 2 · Oração diária e mariana",3:"Etapa 3 · Reconciliação e Missa",4:"Etapa 4 · O Grande Desafio",5:"Banco extra"};
+const PTS={piece:10,perfect:20,intr:5,bonus:15};
+const REASONS=["Comportamento","Recitação em conjunto","Trabalho de equipa","Outro"];
+const ICONS=["🐟","🕊️","⭐","🔥","🐑","⚓","👑","🌿","🍞","💧","🔔","🍇","🌻","🦁","🌈","⛪"];
+const COLORS=["#C0392B","#2457C5","#1E7D4F","#8E44AD","#D35400","#0F7C8C","#B7317A","#7A5A1E"];
+const POWERS=[{k:"luz",ico:"💡",name:"Luz Guia",desc:"Põe a próxima peça certa"},{k:"gelo",ico:"❄️",name:"Congelar",desc:"Para o relógio 10 s"},{k:"lupa",ico:"🔍",name:"Verificação",desc:"Mostra certo e errado 3 s"}];
+const LS_KEY="oracao-peca-a-peca-v1";
+
+/* ===================== UTIL ===================== */
+const clone=o=>JSON.parse(JSON.stringify(o));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const suggestTime=n=>n<=5?45:n<=7?60:n<=9?90:120;
+const fmt=s=>s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`:String(s);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+function defaultTeams(){return [
+  {name:"Pescadores",icon:"🐟",color:COLORS[1]},
+  {name:"Pastorinhos",icon:"🐑",color:COLORS[2]},
+  {name:"Luzeiros",icon:"🔥",color:COLORS[4]},
+  {name:"Pombas da Paz",icon:"🕊️",color:COLORS[3]}
+].map(t=>({id:uid(),...t,score:0,powers:{}}))}
+function freshState(){return {v:1,screen:"home",teams:defaultTeams(),levels:LEVELS.map(l=>({...clone(l),enabled:l.stage!==5})),settings:{uses:1,sound:true},game:null,turn:null,log:[],reason:REASONS[0],modal:null}}
+
+let state;
+function save(){try{const s=Object.assign({},state,{modal:null});localStorage.setItem(LS_KEY,JSON.stringify(s))}catch(e){}}
+function load(){try{const r=localStorage.getItem(LS_KEY);if(!r)return null;const s=JSON.parse(r);return s&&s.v===1?s:null}catch(e){return null}}
+
+/* ===================== SOM / ECRÃ ===================== */
+let AC=null;
+function tone(f,d=.12,type="sine",vol=.15,when=0){if(!state.settings.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;const t0=AC.currentTime+when;g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g).connect(AC.destination);o.start(t0);o.stop(t0+d+.02)}catch(e){}}
+const sfx={place:()=>tone(660,.07,"triangle",.08),remove:()=>tone(360,.07,"triangle",.06),tick:()=>tone(880,.06,"square",.05),
+ success:()=>{tone(523,.16);tone(659,.16,"sine",.15,.12);tone(784,.32,"sine",.15,.24)},end:()=>tone(196,.4,"sawtooth",.07),
+ power:()=>{tone(988,.1,"sine",.1);tone(1319,.16,"sine",.1,.08)},start:()=>{tone(392,.1);tone(587,.18,"sine",.15,.1)}};
+let wakeLock=null;
+async function keepAwake(){try{if("wakeLock" in navigator&&!wakeLock){wakeLock=await navigator.wakeLock.request("screen");wakeLock.addEventListener("release",()=>{wakeLock=null})}}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&state&&state.game)keepAwake()});
+function toast(msg){const r=document.getElementById("toast-root");r.innerHTML=`<div class="toast" role="status">${esc(msg)}</div>`;clearTimeout(toast.t);toast.t=setTimeout(()=>{r.innerHTML=""},2600)}
+
+/* ===================== LÓGICA ===================== */
+const lvl=id=>state.levels.find(l=>l.id===id);
+const curLevel=()=>state.game?lvl(state.game.queue[state.game.idx]):null;
+const teamById=id=>state.teams.find(t=>t.id===id);
+
+function go(s){state.screen=s;window.scrollTo(0,0);render()}
+
+function startGame(){
+  state.teams=state.teams.filter(t=>t.name.trim());
+  if(state.teams.length<2){toast("São precisas pelo menos 2 equipas com nome.");return}
+  const queue=state.levels.filter(l=>l.enabled).map(l=>l.id);
+  if(!queue.length){toast("Ativa pelo menos um nível.");return}
+  const u=state.settings.uses;
+  state.teams.forEach(t=>{t.score=0;t.powers={luz:u,gelo:u,lupa:u}});
+  state.log=[];state.turn=null;
+  state.game={queue,idx:0,played:[],cfg:null,order:[],pos:0,results:{},q:null,line:-1,finished:false};
+  prepLevel();sfx.start();keepAwake();go("levelSetup");
+}
+function prepLevel(){
+  const L=curLevel(),n=L.blocks.length;
+  state.game.cfg={time:suggestTime(n),intrOn:L.stage>=3&&L.intruders.length>0,intrN:Math.max(1,Math.min(L.stage>=4?2:1,L.intruders.length)),mult:L.stage===4?2:1,showText:false};
+  state.game.results={};state.game.q=null;state.game.line=-1;
+}
+function swapLevel(newId){
+  const g=state.game,cur=g.queue[g.idx],j=g.queue.indexOf(newId);
+  if(j>g.idx)g.queue[j]=cur;
+  g.queue[g.idx]=newId;prepLevel();
+}
+function beginLevel(){
+  const g=state.game,n=state.teams.length,start=g.idx%n;
+  g.order=[...Array(n).keys()].map(i=>(i+start)%n);g.pos=0;g.results={};
+  go("handoff");
+}
+function startTurn(){
+  const g=state.game,L=curLevel(),c=g.cfg,pieces={};
+  L.blocks.forEach((t,i)=>pieces["p"+i]={text:t,intr:false});
+  if(c.intrOn)shuffle(L.intruders).slice(0,c.intrN).forEach((t,i)=>pieces["x"+i]={text:t,intr:true});
+  let pool=Object.keys(pieces),tries=0;
+  do{pool=shuffle(pool);tries++}while(tries<12&&pool.slice(0,L.blocks.length).every((id,i)=>pieces[id].text===L.blocks[i]));
+  state.turn={team:g.order[g.pos],pieces,pool,slots:Array(L.blocks.length).fill(null),locked:[],total:c.time*1000,timeLeft:c.time*1000,
+    frozenUntil:0,checkUntil:0,paused:false,confirm:false,last:Date.now(),beep:99,just:-1};
+  sfx.start();go("play");
+}
+function place(id){
+  const t=state.turn;if(!t||t.paused)return;
+  const i=t.slots.indexOf(null);if(i<0){toast("A folha está cheia. Toca numa peça da folha para a tirar.");return}
+  t.pool=t.pool.filter(x=>x!==id);t.slots[i]=id;t.just=i;t.confirm=false;sfx.place();render();
+}
+function unplace(i){
+  const t=state.turn;if(!t||t.paused||t.locked.includes(i))return;
+  const id=t.slots[i];if(!id)return;
+  t.slots[i]=null;t.pool.push(id);t.just=-1;sfx.remove();render();
+}
+function clearSheet(){
+  const t=state.turn;t.slots.forEach((id,i)=>{if(id&&!t.locked.includes(i)){t.pool.push(id);t.slots[i]=null}});t.just=-1;render();
+}
+function useLuz(){
+  const t=state.turn,L=curLevel();
+  for(let i=0;i<L.blocks.length;i++){
+    const pid=t.slots[i];
+    if(pid&&t.pieces[pid].text===L.blocks[i])continue;
+    let cand=t.pool.find(id=>t.pieces[id].text===L.blocks[i]);
+    if(cand)t.pool=t.pool.filter(x=>x!==cand);
+    else{
+      for(let j=0;j<t.slots.length;j++){const q=t.slots[j];
+        if(q&&j!==i&&!t.locked.includes(j)&&t.pieces[q].text===L.blocks[i]&&t.pieces[q].text!==L.blocks[j]){cand=q;t.slots[j]=null;break}}
+    }
+    if(!cand)continue;
+    if(pid)t.pool.push(pid);
+    t.slots[i]=cand;t.locked.push(i);t.just=i;return true;
+  }
+  return false;
+}
+function power(k){
+  const t=state.turn,team=state.teams[t.team],now=Date.now();
+  if(!t||t.paused||team.powers[k]<=0)return;
+  if(k==="luz"){if(!useLuz()){toast("Já está tudo no sítio certo!");return}}
+  if(k==="gelo"){if(now<t.frozenUntil)return;t.frozenUntil=now+10000}
+  if(k==="lupa"){if(now<t.checkUntil)return;t.checkUntil=now+3000;setTimeout(()=>{if(state.screen==="play")render()},3050)}
+  team.powers[k]--;sfx.power();render();
+}
+function submitTurn(timeout){
+  const t=state.turn,g=state.game,L=curLevel(),team=state.teams[t.team],N=L.blocks.length;
+  let correct=0,intr=0;
+  t.slots.forEach((id,i)=>{if(!id)return;const p=t.pieces[id];if(p.intr)intr++;else if(p.text===L.blocks[i])correct++});
+  const all=correct===N,secLeft=Math.max(0,Math.ceil(t.timeLeft/1000));
+  const base=correct*PTS.piece,pen=intr*PTS.intr,tb=all?Math.floor(secLeft/2):0,pf=all?PTS.perfect:0;
+  const total=Math.max(0,base-pen+tb+pf)*g.cfg.mult;
+  team.score+=total;
+  g.results[team.id]={correct,N,intr,secLeft,base,pen,tb,pf,mult:g.cfg.mult,total,timeout:!!timeout,bonus:0};
+  state.turn=null;all?sfx.success():sfx.end();go("turnResult");
+}
+function adjust(teamId,delta){
+  const t=teamById(teamId);if(!t)return;t.score+=delta;
+  state.log.unshift({id:uid(),team:teamId,delta,reason:state.reason,level:curLevel()?curLevel().title:""});
+  state.log=state.log.slice(0,40);sfx.place();render();
+}
+function undo(id){const e=state.log.find(x=>x.id===id);if(!e)return;const t=teamById(e.team);if(t)t.score-=e.delta;state.log=state.log.filter(x=>x!==e);render()}
+function ranked(){
+  const s=[...state.teams].sort((a,b)=>b.score-a.score);let last=null,rank=0;
+  return s.map((t,i)=>{if(t.score!==last){rank=i+1;last=t.score}return {t,rank}});
+}
+function estimateMin(){
+  const n=Math.max(2,state.teams.filter(t=>t.name.trim()).length);
+  const secs=state.levels.filter(l=>l.enabled).reduce((s,l)=>s+n*(suggestTime(l.blocks.length)+20)+150,0);
+  return Math.round(secs/60);
+}
+
+/* ===================== TIMER ===================== */
+function timerHTML(){
+  const t=state.turn,now=Date.now(),frozen=now<t.frozenUntil,left=Math.max(0,t.timeLeft),sec=Math.ceil(left/1000);
+  const C=2*Math.PI*30,off=C*(1-left/t.total);
+  return `<div class="timer ${sec<=10&&!frozen?"low":""} ${frozen?"frozen":""}" id="timer" aria-label="${sec} segundos restantes">
+    <svg viewBox="0 0 72 72" width="72" height="72" aria-hidden="true"><circle cx="36" cy="36" r="30" class="track"/><circle cx="36" cy="36" r="30" class="bar" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 36 36)"/></svg>
+    <span class="secs">${fmt(sec)}</span>${frozen?`<span class="freeze-lbl">❄️ ${Math.ceil((t.frozenUntil-now)/1000)} s</span>`:""}</div>`;
+}
+function updateTimer(){const el=document.getElementById("timer");if(el)el.outerHTML=timerHTML()}
+function tick(){
+  if(!state||state.screen!=="play"||!state.turn)return;
+  const t=state.turn,now=Date.now(),dt=now-t.last;t.last=now;
+  if(t.paused)return;
+  if(t.frozenUntil){if(now<t.frozenUntil){updateTimer();return}t.frozenUntil=0;render();return}
+  t.timeLeft-=dt;
+  const s=Math.ceil(t.timeLeft/1000);
+  if(s<=5&&s>0&&s<t.beep){t.beep=s;sfx.tick()}
+  if(t.timeLeft<=0){t.timeLeft=0;submitTurn(true);return}
+  updateTimer();
+}
+
+/* ===================== COMPONENTES ===================== */
+function topbar(){
+  const g=state.game,inGame=g&&!["home","setup"].includes(state.screen);
+  return `<header class="topbar"><div class="wrap">
+  <button class="brand" data-act="home" aria-label="Ir para o início"><span class="mark" aria-hidden="true"></span><span>Oração Peça a Peça</span></button>
+  ${inGame&&!g.finished?`<span class="prog tnum">Nível ${g.idx+1} de ${g.queue.length}</span>`:""}
+  <div class="tools">
+    ${inGame&&state.screen!=="play"?`<button class="btn sm" data-act="modal" data-m="points">± Pontos</button>`:""}
+    <button class="btn sm icon" data-act="sound" aria-label="${state.settings.sound?"Desligar som":"Ligar som"}" title="Som">${state.settings.sound?"🔊":"🔇"}</button>
+    <button class="btn sm icon" data-act="fs" aria-label="Ecrã inteiro" title="Ecrã inteiro">⛶</button>
+    <button class="btn sm" data-act="modal" data-m="rules">Regras</button>
+  </div></div></header>`;
+}
+const dot=t=>`<span class="dot" style="--team:${t.color}" aria-hidden="true">${t.icon}</span>`;
+function miniScores(){return `<ol class="mini">${ranked().map(({t})=>`<li>${dot(t)}<span class="nm">${esc(t.name)}</span><b>${t.score}</b></li>`).join("")}</ol>`}
+function pointsPanel(){
+  return `<div class="stack">
+  <div><p class="eyebrow muted" style="margin-bottom:8px">Motivo</p><div class="row">${REASONS.map(r=>`<button class="chip" data-act="reason" data-r="${esc(r)}" aria-pressed="${state.reason===r}">${esc(r)}</button>`).join("")}</div></div>
+  <div>${state.teams.map(t=>`<div class="adjrow"><div class="who">${dot(t)}<span>${esc(t.name)} · <span class="tnum">${t.score}</span></span></div>
+    <div class="adjbtns"><button class="btn sm danger" data-act="adj" data-id="${t.id}" data-d="-5">−5</button><button class="btn sm" data-act="adj" data-id="${t.id}" data-d="5">+5</button><button class="btn sm" data-act="adj" data-id="${t.id}" data-d="10">+10</button></div></div>`).join("")}</div>
+  ${state.log.length?`<div><p class="eyebrow muted" style="margin-bottom:6px">Últimos ajustes</p><ul class="loglist">${state.log.slice(0,6).map(e=>{const t=teamById(e.team);return `<li><span><b class="${e.delta>0?"pos":"neg"}">${e.delta>0?"+":""}${e.delta}</b> ${t?esc(t.name):"—"} · ${esc(e.reason)}</span><button class="link" data-act="undo" data-id="${e.id}">Anular</button></li>`}).join("")}</ul></div>`:""}
+  </div>`;
+}
+
+/* ===================== ECRÃS ===================== */
+function scrHome(){
+  const g=state.game,can=g&&!g.finished&&state.resumeScreen;
+  const byStage=s=>state.levels.filter(l=>l.stage===s);
+  return topbar()+`<section class="hero tiled"><div class="wrap hero-in">
+    <p class="eyebrow">Catequese · 6.º ano · Ano da Profissão de Fé</p>
+    <h1>Oração<br>Peça a Peça</h1>
+    <p class="lead">Cada equipa, à vez, reconstrói uma oração baralhada contra o relógio. No fim de cada nível rezamos juntos e há uma pergunta bónus.</p>
+    <div class="row">${can?`<button class="btn big gold" data-act="resume">Continuar jogo · Nível ${g.idx+1}</button><button class="btn big light" data-act="setup">Novo jogo</button>`:`<button class="btn big gold" data-act="setup">Preparar jogo</button>`}
+    <button class="btn big light" data-act="modal" data-m="rules">Como se pontua</button></div>
+  </div></section>
+  <main class="wrap stack-lg">
+    <section class="card"><div class="steps">
+      <div class="step"><span class="num">1</span><div><h3>Prepara</h3><p class="muted">Cria 2 a 6 equipas e escolhe os níveis. Podes mudar a ordem e ajustar os textos à tua paróquia.</p></div></div>
+      <div class="step"><span class="num">2</span><div><h3>Ordena</h3><p class="muted">À vez, cada equipa toca nas peças para as pôr na folha. As outras ficam de costas.</p></div></div>
+      <div class="step"><span class="num">3</span><div><h3>Reza e responde</h3><p class="muted">Revela-se a oração completa, rezam juntos e respondem à pergunta bónus.</p></div></div>
+    </div></section>
+    <section><div class="sec-h"><h2>O percurso</h2><span class="muted">${state.levels.filter(l=>l.enabled).length} níveis ativos · cerca de ${estimateMin()} min</span></div>
+    <div class="stages">${[1,2,3,4].map(s=>`<div class="stage"><h3>${STAGES[s]}</h3><ol>${byStage(s).map(l=>`<li>${esc(l.title)}</li>`).join("")}</ol></div>`).join("")}</div></section>
+  </main>`;
+}
+
+function scrSetup(){
+  const enabled=state.levels.filter(l=>l.enabled);let n=0;
+  return topbar()+`<main class="wrap stack-lg">
+  ${state.game&&!state.game.finished?`<p class="note">Há um jogo a decorrer. Se começares um jogo novo, o anterior é substituído.</p>`:""}
+  <section><div class="sec-h"><h2>Equipas</h2><span class="muted">${state.teams.length} de 6 · toca no ícone para mudar ícone e cor</span></div>
+    <div class="teams">${state.teams.map((t,i)=>`<div class="tcard" style="--team:${t.color}">
+      <button class="tico" data-act="modal" data-m="team" data-i="${i}" aria-label="Mudar ícone e cor de ${esc(t.name)}">${t.icon}</button>
+      <input id="team-${t.id}" data-bind="teamName" data-i="${i}" value="${esc(t.name)}" maxlength="22" aria-label="Nome da equipa ${i+1}">
+      ${state.teams.length>2?`<button class="btn sm icon" data-act="delTeam" data-i="${i}" aria-label="Remover equipa">✕</button>`:""}</div>`).join("")}
+      ${state.teams.length<6?`<button class="addteam" data-act="addTeam">+ Adicionar equipa</button>`:""}
+    </div></section>
+  <section><div class="sec-h"><h2>Níveis</h2><span class="muted">${enabled.length} ativos · cerca de ${estimateMin()} min com ${state.teams.length} equipas</span></div>
+    <ul class="levels">${state.levels.map((l,i)=>{if(l.enabled)n++;return `<li class="lrow ${l.enabled?"":"off"}">
+      <input type="checkbox" id="lv-${l.id}" data-act="toggleLevel" data-id="${l.id}" ${l.enabled?"checked":""} aria-label="Ativar ${esc(l.title)}">
+      <span class="lnum">${l.enabled?n:"–"}</span>
+      <label class="linfo" for="lv-${l.id}"><strong>${esc(l.title)}${l.stage===5?`<span class="tag">Extra</span>`:""}${l.stage===4?`<span class="tag">Pontos ×2</span>`:""}</strong><span class="meta">${STAGES[l.stage]} · ${l.blocks.length} peças · ${l.intruders.length} intrusas disponíveis</span></label>
+      <div class="lbtns"><button class="btn sm icon" data-act="moveLevel" data-id="${l.id}" data-dir="-1" ${i===0?"disabled":""} aria-label="Subir">↑</button><button class="btn sm icon" data-act="moveLevel" data-id="${l.id}" data-dir="1" ${i===state.levels.length-1?"disabled":""} aria-label="Descer">↓</button><button class="btn sm" data-act="modal" data-m="edit" data-id="${l.id}">Editar texto</button></div>
+    </li>`}).join("")}</ul></section>
+  <section class="card"><div class="sec-h"><h2>Ajudas divinas</h2><span class="muted">Usos de cada ajuda por equipa, no jogo todo</span></div>
+    <div class="row">${[1,2,3].map(u=>`<button class="chip" data-act="uses" data-n="${u}" aria-pressed="${state.settings.uses===u}">${u} ${u===1?"vez":"vezes"}</button>`).join("")}</div>
+    <p class="muted" style="margin-top:10px">💡 Luz Guia · ❄️ Congelar tempo · 🔍 Verificação rápida</p></section>
+  </main>
+  <div class="setup-foot"><div class="wrap"><span class="muted">${state.teams.length} equipas · ${enabled.length} níveis</span><button class="btn big primary" data-act="startGame">Começar jogo</button></div></div>`;
+}
+
+function scrLevelSetup(){
+  const g=state.game,L=curLevel(),c=g.cfg,times=[30,45,60,90,120];
+  const swapOpts=state.levels.filter(l=>l.id!==L.id&&!g.played.includes(l.id));
+  return topbar()+`<main class="wrap stack-lg">
+  <section class="lvl-hero tiled"><p class="eyebrow">${STAGES[L.stage]} · Nível ${g.idx+1} de ${g.queue.length}</p>
+    <h1 class="big">${esc(L.title)}</h1>
+    <p>${L.blocks.length} peças${c.intrOn?` + ${c.intrN} intrusa${c.intrN>1?"s":""}`:""} · ${fmt(c.time)}${c.time<60?" s":" min"} por equipa${c.mult>1?` · pontos ×${c.mult}`:""}</p></section>
+  <div class="lvl-grid">
+    <section class="card"><h2 style="font-size:24px;margin-bottom:4px">Ecrã do catequista</h2>
+      <div class="opt"><h3>Tempo por equipa</h3><div class="row">${times.map(s=>`<button class="chip" data-act="time" data-s="${s}" aria-pressed="${c.time===s}">${fmt(s)}${s<60?" s":""}</button>`).join("")}
+        <label class="custom"><span class="muted">Outro:</span><input id="custom-time" type="number" min="10" max="600" step="5" data-bind="customTime" value="${times.includes(c.time)?"":c.time}" placeholder="seg" aria-label="Tempo personalizado em segundos"></label></div></div>
+      <div class="opt"><h3>Peças intrusas</h3><div class="row">
+        <button class="chip" data-act="intrToggle" aria-pressed="${c.intrOn}" ${L.intruders.length?"":"disabled"}>${c.intrOn?"Ativadas":"Desativadas"}</button>
+        ${c.intrOn?`<span class="stepper"><button class="btn sm icon" data-act="intrN" data-d="-1" ${c.intrN<=1?"disabled":""} aria-label="Menos">−</button><b class="tnum">${c.intrN}</b><button class="btn sm icon" data-act="intrN" data-d="1" ${c.intrN>=L.intruders.length?"disabled":""} aria-label="Mais">+</button></span><span class="muted">cada intrusa na folha tira ${PTS.intr} pontos</span>`:""}</div></div>
+      <div class="opt"><h3>Pontuação do nível</h3><div class="row">${[1,2,3].map(m=>`<button class="chip" data-act="mult" data-m="${m}" aria-pressed="${c.mult===m}">×${m}</button>`).join("")}</div></div>
+      <div class="opt"><h3>Texto da oração</h3><div class="row"><button class="btn sm" data-act="showText">${c.showText?"Esconder texto":"Ver texto (só catequista)"}</button></div>
+        ${c.showText?`<div class="secret"><ol>${L.blocks.map(b=>`<li>${esc(b)}</li>`).join("")}</ol></div>`:""}</div>
+      <div class="opt"><h3>Trocar oração</h3><select id="swap" data-bind="swap" aria-label="Trocar a oração deste nível"><option value="">Manter «${esc(L.title)}»</option>${swapOpts.map(l=>`<option value="${l.id}">${esc(l.title)}${l.stage===5?" (extra)":""}</option>`).join("")}</select></div>
+    </section>
+    <aside class="card stack"><h2 style="font-size:22px">Classificação</h2>${miniScores()}
+      <button class="btn big primary" data-act="beginLevel">Começar nível</button></aside>
+  </div></main>`;
+}
+
+function scrHandoff(){
+  const g=state.game,team=state.teams[g.order[g.pos]],L=curLevel(),c=g.cfg;
+  return topbar()+`<main class="wrap"><section class="handoff" style="--team:${team.color}">
+    <p class="eyebrow">Nível ${g.idx+1} · ${esc(L.title)} · vez ${g.pos+1} de ${g.order.length}</p>
+    <div class="team-badge" aria-hidden="true">${team.icon}</div>
+    <h1>Vez do grupo<br>${esc(team.name)}</h1>
+    <p class="turn-warn">Outras equipas, de costas para o ecrã!</p>
+    <p>${L.blocks.length} peças · ${fmt(c.time)}${c.time<60?" s":""}${c.intrOn?" · cuidado com as peças intrusas":""}${c.mult>1?` · pontos ×${c.mult}`:""}</p>
+    <button class="btn big white" data-act="startTurn">Começar agora</button>
+  </section></main>`;
+}
+
+function scrPlay(){
+  const t=state.turn,g=state.game,L=curLevel(),team=state.teams[t.team],now=Date.now();
+  const checking=now<t.checkUntil,frozen=now<t.frozenUntil,firstEmpty=t.slots.indexOf(null),full=firstEmpty<0;
+  const slots=t.slots.map((id,i)=>{
+    const locked=t.locked.includes(i);let cls="slot";
+    if(id){cls+=" filled";if(locked)cls+=" locked";if(i===t.just)cls+=" just";
+      let mk="";if(checking){const ok=t.pieces[id].text===L.blocks[i];cls+=ok?" ok":" bad";mk=`<span class="mk">${ok?"✓":"✗"}</span>`}
+      return `<li class="${cls}"><span class="n">${i+1}</span><button class="box" data-act="unplace" data-i="${i}" ${locked?'aria-disabled="true" title="Colocada pela Luz Guia"':'title="Tocar para tirar"'}><span class="ptext">${esc(t.pieces[id].text)}</span>${locked?"💡":""}${mk}</button></li>`}
+    if(i===firstEmpty)cls+=" next";
+    return `<li class="${cls}"><span class="n">${i+1}</span><div class="box"><span class="ph">${i===firstEmpty?"A próxima peça vai para aqui":""}</span></div></li>`;
+  }).join("");
+  const pool=t.pool.length?t.pool.map(id=>`<button class="piece" data-act="place" data-id="${id}">${esc(t.pieces[id].text)}</button>`).join(""):`<p class="empty">Todas as peças estão na folha.</p>`;
+  const powers=POWERS.map(p=>{const dis=team.powers[p.k]<=0||(p.k==="gelo"&&frozen)||(p.k==="lupa"&&checking)||(p.k==="luz"&&t.locked.length>=L.blocks.length);
+    return `<button class="power" data-act="power" data-p="${p.k}" ${dis?"disabled":""}><span class="pi" aria-hidden="true">${p.ico}</span><span class="pn">${p.name}<small>${p.desc}</small></span><span class="pc tnum">${team.powers[p.k]}</span></button>`}).join("");
+  const board=t.paused?`<section class="card pausecard"><h2>Jogo em pausa</h2><p class="muted">O tabuleiro está escondido. O relógio está parado.</p><button class="btn big primary" data-act="unpause">Continuar</button></section>`:
+  `${t.confirm?`<div class="confirm"><span>Ainda há ${t.slots.filter(x=>!x).length} espaço(s) vazio(s). Entregar mesmo assim?</span><button class="btn sm" data-act="cancelSubmit">Continuar a jogar</button><button class="btn sm primary" data-act="doSubmit">Entregar</button></div>`:""}
+  <div class="powers">${powers}</div>
+  <div class="play">
+    <section class="sheet ${frozen?"is-frozen":""}" aria-label="Folha de oração"><div class="panel-h"><h2>Folha de oração</h2>${t.slots.some(x=>x)?`<button class="link" data-act="clearSheet">Tirar todas</button>`:""}</div><ol class="slots">${slots}</ol></section>
+    <section class="poolbox" aria-label="Peças baralhadas"><div class="panel-h"><h2>Peças baralhadas</h2>${g.cfg.intrOn?`<span class="warnpill">Há ${g.cfg.intrN} intrusa${g.cfg.intrN>1?"s":""}!</span>`:""}</div><div class="pool">${pool}</div>
+    ${full?`<p class="muted" style="margin-top:12px">Folha completa. Confiram e carreguem em <b>Entregar</b>.</p>`:""}</section>
+  </div>`;
+  return topbar()+`<main class="wrap play-wrap">
+  <div class="playbar" style="--team:${team.color}">
+    <div class="pteam">${dot(team)}<div><b>${esc(team.name)}</b><small>${esc(L.title)}${g.cfg.mult>1?` · ×${g.cfg.mult}`:""}</small></div></div>
+    ${timerHTML()}
+    <div class="pactions">${t.paused?"":`<button class="btn sm" data-act="pause">Pausa</button>`}<button class="btn primary" data-act="submit" ${t.paused?"disabled":""}>Entregar</button></div>
+  </div>${board}</main>`;
+}
+
+function scrTurnResult(){
+  const g=state.game,team=state.teams[g.order[g.pos]],r=g.results[team.id],last=g.pos===g.order.length-1,next=last?null:state.teams[g.order[g.pos+1]];
+  const all=r.correct===r.N;
+  return topbar()+`<main class="wrap stack-lg">
+  <section class="lvl-hero" style="background:${team.color};color:#fff"><p class="eyebrow">${r.timeout?"O tempo acabou!":"Entregue!"}</p><h1 class="big">${esc(team.name)}</h1></section>
+  <div class="result">
+    <section class="card stack"><p class="eyebrow muted">Peças no lugar certo</p><p class="bignum">${r.correct}<span class="muted" style="font-size:.45em">/${r.N}</span></p>
+      <p class="muted">${all?"Oração completa e certinha!":"Para não ajudar as outras equipas, só mostramos quantas estão certas, não quais."}</p></section>
+    <section class="card"><ul class="breakdown">
+      <li><span>Peças certas · ${r.correct} × ${PTS.piece}</span><span>${r.base}</span></li>
+      ${r.intr?`<li><span>Peças intrusas na folha · ${r.intr} × ${PTS.intr}</span><span class="neg">−${r.pen}</span></li>`:""}
+      ${all?`<li><span>Bónus de tempo · ${r.secLeft} s restantes</span><span class="pos">+${r.tb}</span></li><li><span>Bónus sem erros</span><span class="pos">+${r.pf}</span></li>`:`<li><span class="muted">Bónus de tempo e sem erros só com a oração toda certa</span><span class="muted">0</span></li>`}
+      ${r.mult>1?`<li><span>Nível a dobrar</span><span>×${r.mult}</span></li>`:""}
+      <li class="tot"><span>Total do nível</span><span class="pos">+${r.total}</span></li></ul></section>
+  </div>
+  <div class="row" style="justify-content:flex-end"><button class="btn big primary" data-act="nextTurn">${last?"Revelar a oração":`Passar ao grupo ${esc(next.name)}`}</button></div>
+  </main>`;
+}
+
+function scrReveal(){
+  const g=state.game,L=curLevel(),stepping=g.line>=0;
+  return topbar()+`<main class="wrap stack-lg">
+  <div><p class="eyebrow muted">Todas as equipas jogaram · Nível ${g.idx+1}</p><h1 style="font-size:clamp(32px,5vw,54px);margin-top:6px">Vamos rezar juntos</h1><p class="muted" style="margin-top:6px">${esc(L.title)}</p></div>
+  <section class="card"><p class="prayer ${stepping?"stepping":""}">${L.blocks.map((b,i)=>`<span class="${i<g.line?"done":i===g.line?"hl":""}">${esc(b)}</span>`).join(" ")}</p></section>
+  <div class="row" style="justify-content:space-between">
+    <div class="row">${g.line<L.blocks.length-1?`<button class="btn" data-act="revealNext">${stepping?"Linha seguinte":"Rezar linha a linha"}</button>`:""}${stepping?`<button class="btn" data-act="revealAll">Mostrar tudo</button>`:""}</div>
+    <button class="btn big gold" data-act="toQuestion">Pergunta bónus</button></div>
+  </main>`;
+}
+
+function scrQuestion(){
+  const g=state.game,L=curLevel(),q=L.q,s=g.q,letters="ABCD";
+  return topbar()+`<main class="wrap stack-lg">
+  <div><p class="eyebrow muted">Pergunta bónus · +${PTS.bonus} pontos por equipa que acertar</p><p class="qtext" style="margin-top:10px">${esc(q.text)}</p></div>
+  <div class="opts">${s.order.map((oi,k)=>`<div class="qopt ${s.revealed?(oi===q.ok?"right":"dim"):""}"><span class="lt">${letters[k]}</span><span>${esc(q.opts[oi])}</span></div>`).join("")}</div>
+  ${s.revealed?`<div class="explain">${esc(q.explain)}</div>
+    <section class="card stack"><h2 style="font-size:22px">Que equipas acertaram?</h2>
+    <div class="toggles">${state.teams.map(t=>`<button class="ttog" data-act="toggleRight" data-id="${t.id}" aria-pressed="${s.right.includes(t.id)}">${dot(t)}${esc(t.name)}${s.right.includes(t.id)?" ✓":""}</button>`).join("")}</div></section>
+    <div class="row" style="justify-content:flex-end"><button class="btn big primary" data-act="toScores">Atribuir pontos e ver classificação</button></div>`
+  :`<p class="muted">Cada equipa escreve a letra num papel ou levanta o cartão. Depois revela a resposta.</p><div class="row" style="justify-content:flex-end"><button class="btn big gold" data-act="revealAnswer">Revelar resposta</button></div>`}
+  </main>`;
+}
+
+function scrScores(){
+  const g=state.game,R=ranked(),max=Math.max(1,...state.teams.map(t=>t.score)),last=g.idx>=g.queue.length-1;
+  const lvlPts=t=>{const r=g.results[t.id];return (r?r.total+r.bonus:0)};
+  const nextL=last?null:lvl(g.queue[g.idx+1]);
+  return topbar()+`<main class="wrap stack-lg">
+  <div class="sec-h" style="margin:0"><h1 style="font-size:clamp(32px,5vw,54px)">Classificação</h1><span class="muted">depois do nível ${g.idx+1} · ${esc(curLevel().title)}</span></div>
+  <div class="lvl-grid">
+    <ol class="rank">${R.map(({t,rank})=>`<li class="rk" style="--team:${t.color}"><span class="pl">${rank}.º</span>${dot(t)}<div style="min-width:0"><div class="nm">${esc(t.name)}</div><div class="barw"><i style="width:${Math.max(2,Math.round(Math.max(0,t.score)/max*100))}%"></i></div></div><div class="sc"><b>${t.score}</b><small>+${lvlPts(t)} neste nível</small></div></li>`).join("")}</ol>
+    <aside class="card"><h2 style="font-size:22px;margin-bottom:12px">Pontos extra do catequista</h2>${pointsPanel()}</aside>
+  </div>
+  <div class="row" style="justify-content:flex-end">${last?`<button class="btn big gold" data-act="toFinal">Ver o pódio</button>`:`<button class="btn big primary" data-act="nextLevel">Próximo nível · ${esc(nextL.title)}</button>`}</div>
+  </main>`;
+}
+
+function scrFinal(){
+  const g=state.game,R=ranked(),top=R.slice(0,3),order=[top[1],top[0],top[2]].filter(Boolean),H={1:170,2:125,3:90};
+  const tie=R.length>1&&R[0].t.score===R[1].t.score;
+  const extras=state.levels.filter(l=>!g.played.includes(l.id));
+  return topbar()+`<main class="wrap stack-lg">
+  <div style="text-align:center"><p class="eyebrow muted">Fim do jogo</p><h1 style="font-size:clamp(40px,7vw,80px);margin-top:6px">${tie?"Temos um empate!":"Parabéns, "+esc(R[0].t.name)+"!"}</h1></div>
+  <div class="podium">${order.map(({t,rank})=>`<div class="pod"><span class="dot" style="--team:${t.color}">${t.icon}</span><span class="nm">${esc(t.name)}</span><span class="pts">${t.score} pontos</span><div class="col" style="--team:${t.color};height:${H[Math.min(rank,3)]}px">${rank}.º</div></div>`).join("")}</div>
+  ${R.length>3?`<ol class="rank">${R.slice(3).map(({t,rank})=>`<li class="rk" style="--team:${t.color}"><span class="pl">${rank}.º</span>${dot(t)}<div class="nm">${esc(t.name)}</div><div class="sc"><b>${t.score}</b></div></li>`).join("")}</ol>`:""}
+  ${extras.length?`<section class="card stack"><h2 style="font-size:22px">${tie?"Desempate com uma oração extra":"Jogar mais uma oração"}</h2><div class="row">${extras.map(l=>`<button class="btn" data-act="extraLevel" data-id="${l.id}">${esc(l.title)}</button>`).join("")}</div></section>`:""}
+  <div class="row" style="justify-content:center"><button class="btn big primary" data-act="setup">Preparar novo jogo</button></div>
+  </main>`;
+}
+
+const SCREENS={home:scrHome,setup:scrSetup,levelSetup:scrLevelSetup,handoff:scrHandoff,play:scrPlay,turnResult:scrTurnResult,reveal:scrReveal,question:scrQuestion,scores:scrScores,final:scrFinal};
+
+/* ===================== MODAIS ===================== */
+function renderModal(){
+  const m=state.modal;if(!m)return "";
+  let title="",body="";
+  if(m.type==="rules"){title="Regras e pontuação";body=`<div class="rules stack">
+    <p>Cada equipa tem a sua vez com as peças baralhadas de forma diferente. Toca numa peça para a pôr no próximo espaço livre; toca numa peça da folha para a tirar.</p>
+    <dl><dt>+${PTS.piece}</dt><dd>por cada peça no lugar certo</dd>
+    <dt>−${PTS.intr}</dt><dd>por cada peça intrusa deixada na folha</dd>
+    <dt>+½ s</dt><dd>bónus de tempo: 1 ponto por cada 2 segundos que sobram (só com a oração toda certa)</dd>
+    <dt>+${PTS.perfect}</dt><dd>bónus sem erros (oração toda certa)</dd>
+    <dt>×2</dt><dd>no Credo, o Grande Desafio (o catequista pode mudar)</dd>
+    <dt>+${PTS.bonus}</dt><dd>por acertar na pergunta bónus</dd>
+    <dt>±</dt><dd>pontos extra do catequista: comportamento, recitação em conjunto, trabalho de equipa</dd></dl>
+    <p><b>Ajudas divinas</b> — 💡 Luz Guia coloca a próxima peça certa e fixa-a; ❄️ Congelar para o relógio 10 segundos; 🔍 Verificação mostra 3 segundos o que está certo (verde) e errado (vermelho).</p>
+    <p class="muted">O jogo fica guardado neste navegador: se fechares a página, podes continuar onde ficaste.</p></div>`}
+  if(m.type==="points"){title="Pontos extra";body=pointsPanel()}
+  if(m.type==="team"){const t=state.teams[+m.i];title=`Ícone e cor · ${esc(t.name)}`;
+    body=`<div class="stack"><p class="eyebrow muted">Ícone</p><div class="picker">${ICONS.map(ic=>`<button data-act="pickIcon" data-i="${m.i}" data-v="${ic}" aria-pressed="${t.icon===ic}">${ic}</button>`).join("")}</div>
+    <p class="eyebrow muted">Cor</p><div class="picker">${COLORS.map(c=>`<button class="sw" style="--sw:${c}" data-act="pickColor" data-i="${m.i}" data-v="${c}" aria-pressed="${t.color===c}" aria-label="Cor ${c}"></button>`).join("")}</div>
+    <div class="row" style="justify-content:flex-end"><button class="btn primary" data-act="closeModal">Feito</button></div></div>`}
+  if(m.type==="edit"){const l=lvl(m.id);title="Editar oração";
+    body=`<div class="stack"><p class="muted">Usa a versão da tua paróquia. Uma peça por linha, pela ordem certa.</p>
+    <div class="field"><label for="ed-title">Nome</label><input id="ed-title" value="${esc(l.title)}"></div>
+    <div class="field"><label for="ed-blocks">Peças da oração (${l.blocks.length})</label><textarea id="ed-blocks">${esc(l.blocks.join("\n"))}</textarea></div>
+    <div class="field"><label for="ed-intr">Peças intrusas (uma por linha)</label><textarea id="ed-intr" style="min-height:90px">${esc(l.intruders.join("\n"))}</textarea></div>
+    <div class="row" style="justify-content:space-between"><button class="link" data-act="resetEdit" data-id="${l.id}">Repor o texto original</button><div class="row"><button class="btn" data-act="closeModal">Cancelar</button><button class="btn primary" data-act="saveEdit" data-id="${l.id}">Guardar</button></div></div></div>`}
+  return `<div class="scrim" data-act="closeModal"></div><div class="modal" role="dialog" aria-modal="true" aria-label="${title}"><div class="modal-h"><h2>${title}</h2><button class="btn sm icon" data-act="closeModal" aria-label="Fechar">✕</button></div>${body}</div>`;
+}
+
+/* ===================== AÇÕES ===================== */
+const A={
+  home(){if(state.screen==="play"&&state.turn)state.turn.paused=true;if(!["home","setup"].includes(state.screen))state.resumeScreen=state.screen;go("home")},
+  setup(){go("setup")},
+  resume(){const s=state.resumeScreen||"levelSetup";if(s==="play"&&!state.turn){go("handoff");return}keepAwake();go(s)},
+  sound(){state.settings.sound=!state.settings.sound;render()},
+  fs(){try{if(document.fullscreenElement)document.exitFullscreen();else{const p=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>toast("O ecrã inteiro não está disponível aqui."))}}catch(e){toast("O ecrã inteiro não está disponível aqui.")}},
+  modal(d){state.modal={type:d.m,id:d.id,i:d.i};render()},
+  closeModal(){state.modal=null;render()},
+  addTeam(){if(state.teams.length>=6)return;const used=state.teams.map(t=>t.color);const c=COLORS.find(x=>!used.includes(x))||COLORS[0];const ic=ICONS.find(x=>!state.teams.some(t=>t.icon===x));state.teams.push({id:uid(),name:"Equipa "+(state.teams.length+1),icon:ic,color:c,score:0,powers:{}});render()},
+  delTeam(d){if(state.teams.length<=2)return;state.teams.splice(+d.i,1);render()},
+  pickIcon(d){state.teams[+d.i].icon=d.v;render()},
+  pickColor(d){state.teams[+d.i].color=d.v;render()},
+  toggleLevel(d){const l=lvl(d.id);l.enabled=!l.enabled;render()},
+  moveLevel(d){const i=state.levels.findIndex(l=>l.id===d.id),j=i+(+d.dir);if(j<0||j>=state.levels.length)return;[state.levels[i],state.levels[j]]=[state.levels[j],state.levels[i]];render()},
+  saveEdit(d){const l=lvl(d.id);const blocks=document.getElementById("ed-blocks").value.split("\n").map(s=>s.trim()).filter(Boolean);
+    if(blocks.length<2){toast("A oração precisa de pelo menos 2 peças.");return}
+    l.title=document.getElementById("ed-title").value.trim()||l.title;l.blocks=blocks;
+    l.intruders=document.getElementById("ed-intr").value.split("\n").map(s=>s.trim()).filter(s=>s&&!blocks.includes(s));
+    state.modal=null;toast("Oração guardada.");render()},
+  resetEdit(d){const o=LEVELS.find(x=>x.id===d.id);const l=lvl(d.id);l.title=o.title;l.blocks=clone(o.blocks);l.intruders=clone(o.intruders);render()},
+  uses(d){state.settings.uses=+d.n;render()},
+  startGame,
+  time(d){state.game.cfg.time=+d.s;render()},
+  intrToggle(){const c=state.game.cfg;c.intrOn=!c.intrOn;render()},
+  intrN(d){const c=state.game.cfg,L=curLevel();c.intrN=Math.max(1,Math.min(L.intruders.length,c.intrN+(+d.d)));render()},
+  mult(d){state.game.cfg.mult=+d.m;render()},
+  showText(){state.game.cfg.showText=!state.game.cfg.showText;render()},
+  beginLevel,startTurn,
+  place(d){place(d.id)},unplace(d){unplace(+d.i)},clearSheet,power(d){power(d.p)},
+  pause(){state.turn.paused=true;render()},
+  unpause(){state.turn.paused=false;state.turn.last=Date.now();render()},
+  submit(){const t=state.turn;if(t.slots.includes(null)&&!t.confirm){t.confirm=true;render();return}submitTurn(false)},
+  doSubmit(){submitTurn(false)},
+  cancelSubmit(){state.turn.confirm=false;render()},
+  nextTurn(){const g=state.game;g.pos++;if(g.pos<g.order.length){go("handoff");return}
+    const id=g.queue[g.idx];if(!g.played.includes(id))g.played.push(id);g.line=-1;go("reveal")},
+  revealNext(){state.game.line++;render()},
+  revealAll(){state.game.line=-1;render()},
+  toQuestion(){const L=curLevel();state.game.q={revealed:false,right:[],order:shuffle([...L.q.opts.keys()])};go("question")},
+  revealAnswer(){state.game.q.revealed=true;sfx.power();render()},
+  toggleRight(d){const r=state.game.q.right,i=r.indexOf(d.id);i<0?r.push(d.id):r.splice(i,1);render()},
+  toScores(){const g=state.game;g.q.right.forEach(id=>{const t=teamById(id);if(!t)return;t.score+=PTS.bonus;if(!g.results[id])g.results[id]={total:0,bonus:0};g.results[id].bonus=PTS.bonus});
+    if(g.q.right.length)sfx.success();g.q.done=true;go("scores")},
+  nextLevel(){const g=state.game;g.idx++;prepLevel();go("levelSetup")},
+  toFinal(){state.game.finished=true;sfx.success();go("final")},
+  extraLevel(d){const g=state.game;g.queue.push(d.id);g.idx=g.queue.length-1;g.finished=false;prepLevel();go("levelSetup")},
+  reason(d){state.reason=d.r;render()},
+  adj(d){adjust(d.id,+d.d)},
+  undo(d){undo(d.id)}
+};
+
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]");if(!el||el.disabled||el.getAttribute("aria-disabled")==="true")return;
+  const fn=A[el.dataset.act];if(fn){fn(el.dataset)}
+});
+document.addEventListener("input",e=>{
+  const el=e.target;if(el.dataset.bind==="teamName"){state.teams[+el.dataset.i].name=el.value;save()}
+});
+document.addEventListener("change",e=>{
+  const el=e.target,b=el.dataset.bind;
+  if(b==="customTime"){const v=Math.round(+el.value);if(v>=10&&v<=600){state.game.cfg.time=v;render()}else if(el.value!==""){toast("Escolhe entre 10 e 600 segundos.")}}
+  if(b==="swap"&&el.value){swapLevel(el.value);toast("Oração trocada.");render()}
+  if(b==="teamName"){render()}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.modal){state.modal=null;render()}});
+
+function render(){
+  document.getElementById("app").innerHTML=(SCREENS[state.screen]||scrHome)();
+  document.getElementById("modal-root").innerHTML=renderModal();
+  save();
+}
+
+/* ===================== ARRANQUE ===================== */
+function start(data){
+  let s=data&&data.state?data.state:null;
+  if(!s){
+    s=load();
+    if(s){if(!["home","setup"].includes(s.screen)){s.resumeScreen=s.screen;s.screen="home"}if(s.turn)s.turn.paused=true}
+    else s=freshState();
+  }
+  if(s.turn)s.turn.last=Date.now();
+  state=s;state.modal=null;
+  if(window.__oppTicker)clearInterval(window.__oppTicker);
+  window.__oppTicker=setInterval(tick,200);
+  render();
+}
+if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(()=>({state}))}catch(e){}}
+window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+</script>
